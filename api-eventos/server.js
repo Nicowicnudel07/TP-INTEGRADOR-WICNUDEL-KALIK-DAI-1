@@ -9,6 +9,7 @@ app.use(express.json());
 // Rutas base
 app.use('/api/user', require('./routes/user.routes'));
 app.use('/api/event', require('./routes/event.routes'));
+app.use('/api/event-location', require('./routes/event-location.routes'));
 // podés agregar más rutas acá
 
 const PORT = process.env.PORT || 3000;
