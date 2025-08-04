@@ -1,45 +1,76 @@
-const db = require('./config/db');
+const { dbOperations } = require('./config/db');
 const bcrypt = require('bcryptjs');
 
 const insertSeedData = async () => {
   try {
-    // Insertar provincias
-    db.run(`INSERT OR IGNORE INTO provinces (id, name, full_name, latitude, longitude, display_order) VALUES
-      (1, 'Buenos Aires', 'Provincia de Buenos Aires', '-34.61444091796875', '-58.445877075195312', 1),
-      (2, 'CABA', 'Ciudad Autónoma de Buenos Aires', '-34.61444091796875', '-58.445877075195312', 2)`);
-
-    // Insertar localidades
-    db.run(`INSERT OR IGNORE INTO locations (id, name, id_province, latitude, longitude) VALUES
-      (3391, 'Nuñez', 2, '-34.548805236816406', '-58.463230133056641'),
-      (3397, 'Villa Crespo', 2, '-34.599876403808594', '-58.438816070556641')`);
-
     // Insertar usuarios
     const hashedPassword = await bcrypt.hash('123456', 10);
-    db.run(`INSERT OR IGNORE INTO users (id, first_name, last_name, username, password) VALUES
-      (1, 'Pablo', 'Ulman', 'pablo.ulman@ort.edu.ar', ?),
-      (2, 'Julian', 'Schiffer', 'jschiffer@email.com', ?)`, [hashedPassword, hashedPassword]);
-
-    // Insertar tags
-    db.run(`INSERT OR IGNORE INTO tags (id, name) VALUES
-      (1, 'Rock'),
-      (2, 'Pop'),
-      (3, 'Jazz'),
-      (4, 'Electrónica')`);
+    
+    // Crear usuarios si no existen
+    if (dbOperations.findUserByUsername('pablo.ulman@ort.edu.ar')) {
+      console.log('Usuarios ya existen');
+      return;
+    }
+    
+    dbOperations.createUser({
+      first_name: 'Pablo',
+      last_name: 'Ulman',
+      username: 'pablo.ulman@ort.edu.ar',
+      password: hashedPassword
+    });
+    
+    dbOperations.createUser({
+      first_name: 'Julian',
+      last_name: 'Schiffer',
+      username: 'jschiffer@email.com',
+      password: hashedPassword
+    });
 
     // Insertar ubicaciones de eventos
-    db.run(`INSERT OR IGNORE INTO event_locations (id, id_location, name, full_address, max_capacity, latitude, longitude, id_creator_user) VALUES
-      (1, 3391, 'Club Atlético River Plate', 'Av. Pres. Figueroa Alcorta 7597', 84567, '-34.54454505693356', '-58.4494761175694', 1),
-      (2, 3397, 'Movistar Arena', 'Humboldt 450, C1414 Cdad. Autónoma de Buenos Aires', 15000, '-34.593488697344405', '-58.44735886932156', 1)`);
+    dbOperations.createEventLocation({
+      id_location: 3391,
+      name: 'Club Atlético River Plate',
+      full_address: 'Av. Pres. Figueroa Alcorta 7597',
+      max_capacity: 84567,
+      latitude: '-34.54454505693356',
+      longitude: '-58.4494761175694',
+      id_creator_user: 1
+    });
+
+    dbOperations.createEventLocation({
+      id_location: 3397,
+      name: 'Movistar Arena',
+      full_address: 'Humboldt 450, C1414 Cdad. Autónoma de Buenos Aires',
+      max_capacity: 15000,
+      latitude: '-34.593488697344405',
+      longitude: '-58.44735886932156',
+      id_creator_user: 1
+    });
 
     // Insertar eventos
-    db.run(`INSERT OR IGNORE INTO events (id, name, description, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user) VALUES
-      (1, 'Taylor Swift', 'Un alto show', 1, '2024-03-21 03:00:00', 210, 15500, 1, 120000, 2),
-      (2, 'Toto', 'La legendaria banda estadounidense se presentará en Buenos Aires.', 2, '2024-11-22 03:00:00', 120, 150000, 1, 12000, 1)`);
+    dbOperations.createEvent({
+      name: 'Taylor Swift',
+      description: 'Un alto show',
+      id_event_location: 1,
+      start_date: '2024-03-21 03:00:00',
+      duration_in_minutes: 210,
+      price: 15500,
+      enabled_for_enrollment: true,
+      max_assistance: 120000,
+      id_creator_user: 2
+    });
 
-    // Insertar relación evento-tags
-    db.run(`INSERT OR IGNORE INTO event_tags (id_event, id_tag) VALUES
-      (1, 1), (1, 2),
-      (2, 1)`);
+    dbOperations.createEvent({
+      name: 'Toto',
+      description: 'La legendaria banda estadounidense se presentará en Buenos Aires.',
+      id_event_location: 2,
+      start_date: '2024-11-22 03:00:00',
+      duration_in_minutes: 120,
+      price: 150000,
+      enabled_for_enrollment: true,
+      max_assistance: 12000,
+      id_creator_user: 1
+    });
 
     console.log('Datos de prueba insertados correctamente');
   } catch (error) {

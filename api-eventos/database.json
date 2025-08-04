@@ -1,0 +1,71 @@
+{
+  "users": [
+    {
+      "first_name": "Pablo",
+      "last_name": "Ulman",
+      "username": "pablo.ulman@ort.edu.ar",
+      "password": "$2a$10$YePIFpTZec4LnxtNc5ro7.w1GYKjIK9gKOJpfzTllK3MpPBgVlNwi",
+      "id": 1
+    },
+    {
+      "first_name": "Julian",
+      "last_name": "Schiffer",
+      "username": "jschiffer@email.com",
+      "password": "$2a$10$YePIFpTZec4LnxtNc5ro7.w1GYKjIK9gKOJpfzTllK3MpPBgVlNwi",
+      "id": 2
+    }
+  ],
+  "provinces": [],
+  "locations": [],
+  "event_locations": [
+    {
+      "id_location": 3391,
+      "name": "Club Atlético River Plate",
+      "full_address": "Av. Pres. Figueroa Alcorta 7597",
+      "max_capacity": 84567,
+      "latitude": "-34.54454505693356",
+      "longitude": "-58.4494761175694",
+      "id_creator_user": 1,
+      "id": 1
+    },
+    {
+      "id_location": 3397,
+      "name": "Movistar Arena",
+      "full_address": "Humboldt 450, C1414 Cdad. Autónoma de Buenos Aires",
+      "max_capacity": 15000,
+      "latitude": "-34.593488697344405",
+      "longitude": "-58.44735886932156",
+      "id_creator_user": 1,
+      "id": 2
+    }
+  ],
+  "events": [
+    {
+      "name": "Taylor Swift",
+      "description": "Un alto show",
+      "id_event_location": 1,
+      "start_date": "2024-03-21 03:00:00",
+      "duration_in_minutes": 210,
+      "price": 15500,
+      "enabled_for_enrollment": true,
+      "max_assistance": 120000,
+      "id_creator_user": 2,
+      "id": 1
+    },
+    {
+      "name": "Toto",
+      "description": "La legendaria banda estadounidense se presentará en Buenos Aires.",
+      "id_event_location": 2,
+      "start_date": "2024-11-22 03:00:00",
+      "duration_in_minutes": 120,
+      "price": 150000,
+      "enabled_for_enrollment": true,
+      "max_assistance": 12000,
+      "id_creator_user": 1,
+      "id": 2
+    }
+  ],
+  "tags": [],
+  "event_tags": [],
+  "event_enrollments": []
+}
