@@ -34,6 +34,13 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
+  
+  // Validación de email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(username)) {
+    return res.status(400).json({ success: false, message: 'El email es invalido.', token: '' });
+  }
+  
   try {
     const result = await pool.query(`SELECT * FROM users WHERE username = $1`, [username]);
     const user = result.rows[0];
@@ -50,6 +57,7 @@ exports.login = async (req, res) => {
 
     res.status(200).json({ success: true, message: '', token });
   } catch (err) {
+    console.error('ERROR AL INICIAR SESIÓN:', err);
     res.status(400).json({ success: false, message: 'Error al iniciar sesión', token: '' });
   }
 };

@@ -1,0 +1,393 @@
+{
+  "info": {
+    "name": "API Eventos",
+    "description": "Colección de endpoints para la API de Eventos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Registrar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Juan\",\n  \"last_name\": \"Pérez\",\n  \"username\": \"juan.perez@email.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/user/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "user", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('token', response.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"juan.perez@email.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/user/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "user", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eventos",
+      "item": [
+        {
+          "name": "Listar Eventos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/event/?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", ""],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Eventos por Nombre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/event/?name=taylor",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", ""],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "taylor"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Eventos por Fecha",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/event/?startdate=2025-03-03",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", ""],
+              "query": [
+                {
+                  "key": "startdate",
+                  "value": "2025-03-03"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Eventos por Tag",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/event/?tag=Rock",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", ""],
+              "query": [
+                {
+                  "key": "tag",
+                  "value": "Rock"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detalle de Evento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/event/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear Evento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Concierto de Rock\",\n  \"description\": \"Un increíble concierto de rock\",\n  \"id_event_location\": 1,\n  \"start_date\": \"2025-06-15T20:00:00.000Z\",\n  \"duration_in_minutes\": 120,\n  \"price\": 5000,\n  \"enabled_for_enrollment\": true,\n  \"max_assistance\": 1000,\n  \"tags\": [1, 2]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/event/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", ""]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Evento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"name\": \"Concierto de Rock Actualizado\",\n  \"description\": \"Un increíble concierto de rock actualizado\",\n  \"id_event_location\": 1,\n  \"start_date\": \"2025-06-15T20:00:00.000Z\",\n  \"duration_in_minutes\": 120,\n  \"price\": 6000,\n  \"enabled_for_enrollment\": true,\n  \"max_assistance\": 1000,\n  \"tags\": [1, 2]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/event/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", ""]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Evento",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/event/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", "1"]
+            }
+          }
+        },
+        {
+          "name": "Inscribirse a Evento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/event/1/enrollment",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", "1", "enrollment"]
+            }
+          }
+        },
+        {
+          "name": "Desinscribirse de Evento",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/event/1/enrollment",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", "1", "enrollment"]
+            }
+          }
+        },
+        {
+          "name": "Listar Participantes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/event/1/participants",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event", "1", "participants"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ubicaciones de Eventos",
+      "item": [
+        {
+          "name": "Listar Ubicaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/event-location/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event-location", ""]
+            }
+          }
+        },
+        {
+          "name": "Detalle de Ubicación",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/event-location/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event-location", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear Ubicación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_location\": 1,\n  \"name\": \"Estadio Monumental\",\n  \"full_address\": \"Av. Pres. Figueroa Alcorta 7597\",\n  \"max_capacity\": 84567,\n  \"latitude\": -34.54454505693356,\n  \"longitude\": -58.4494761175694\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/event-location/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event-location", ""]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Ubicación",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_location\": 1,\n  \"name\": \"Estadio Monumental Actualizado\",\n  \"full_address\": \"Av. Pres. Figueroa Alcorta 7597\",\n  \"max_capacity\": 84567,\n  \"latitude\": -34.54454505693356,\n  \"longitude\": -58.4494761175694\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/event-location/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event-location", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Ubicación",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/event-location/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "event-location", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+} 
