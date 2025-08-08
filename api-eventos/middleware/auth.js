@@ -11,3 +11,35 @@ module.exports = (req, res, next) => {
     next();
   });
 }; 
+
+/*
+const jwt = require('jsonwebtoken');
+
+const authenticate = (req, res, next) => {
+  try {
+    // Manejar ambos formatos de token: "Bearer token" y solo "token"
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: 'Autenticación requerida',
+      });
+    }
+    
+    const token = authHeader.startsWith('Bearer ') 
+      ? authHeader.substring(7, authHeader.length)
+      : authHeader;
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: 'Token inválido o expirado',
+    });
+  }
+};
+
+module.exports = { authenticate }; */

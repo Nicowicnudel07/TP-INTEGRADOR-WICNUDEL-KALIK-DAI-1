@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { initializeDatabase } = require('./config/db');
+const { initializeDatabase } = require('./src/config/db');
 
 const app = express();
 app.use(cors());
@@ -13,10 +13,21 @@ const startServer = async () => {
     await initializeDatabase();
     
     // Rutas base
-    app.use('/api/user', require('./routes/user.routes'));
-    app.use('/api/event', require('./routes/event.routes'));
-    app.use('/api/event-location', require('./routes/event-location.routes'));
-    // podés agregar más rutas acá
+    app.use('/api/user', require('./src/routes/userRoutes'));
+    app.use('/api/event', require('./src/routes/eventRoutes'));
+    app.use('/api/event-location', require('./src/routes/eventLocationRoutes'));
+    app.use('/api/tags', require('./src/routes/tagRoutes'));
+    app.use('/api/provinces', require('./src/routes/provinceRoutes'));
+    app.use('/api/locations', require('./src/routes/locationRoutes'));
+
+    // Middleware de manejo de errores
+    app.use((err, req, res, next) => {
+      console.error(err.stack);
+      res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || 'Error interno del servidor',
+      });
+    });
 
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
