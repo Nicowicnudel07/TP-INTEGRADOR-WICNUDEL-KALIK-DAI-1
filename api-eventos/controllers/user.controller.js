@@ -20,13 +20,13 @@ exports.register = async (req, res) => {
 
   try {
     // Verificar si el usuario ya existe
-    const existingUser = dbOperations.findUserByUsername(username);
+    const existingUser = await dbOperations.findUserByUsername(username);
     if (existingUser) {
       return res.status(400).json({ success: false, message: 'El usuario ya existe', token: '' });
     }
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = dbOperations.createUser({
+    await dbOperations.createUser({
       first_name,
       last_name,
       username,
@@ -42,20 +42,27 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
-  
-  // Validación de email
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(username)) {
+    console.log("Email inválido:", username);
     return res.status(400).json({ success: false, message: 'El email es invalido.', token: '' });
   }
-  
+
   try {
-    const user = dbOperations.findUserByUsername(username);
-    
-    if (!user) return res.status(401).json({ success: false, message: 'Usuario o clave inválida.', token: '' });
+    const user = await dbOperations.findUserByUsername(username);
+    console.log("Usuario encontrado:", user);
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Usuario o clave inválida.', token: '' });
+    }
 
     const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) return res.status(401).json({ success: false, message: 'Usuario o clave inválida.', token: '' });
+    console.log("¿Password correcta?", isValid);
+
+    if (!isValid) {
+      return res.status(401).json({ success: false, message: 'Usuario o clave inválida.', token: '' });
+    }
 
     const token = jwt.sign(
       { id: user.id, first_name: user.first_name, last_name: user.last_name },
