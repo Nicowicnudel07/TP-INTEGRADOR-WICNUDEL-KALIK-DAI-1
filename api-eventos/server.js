@@ -14,12 +14,12 @@ const startServer = async () => {
     await initializeDatabase();
     
     // Rutas base
-    app.use('/api/user', require('./src/routes/userRoutes'));
-    app.use('/api/event', require('./src/routes/eventRoutes'));
-    app.use('/api/event-location', require('./src/routes/eventLocationRoutes'));
-    app.use('/api/tags', require('./src/routes/tagRoutes'));
-    app.use('/api/provinces', require('./src/routes/provinceRoutes'));
-    app.use('/api/locations', require('./src/routes/locationRoutes'));
+    app.use('/api/user', require('./routes/userRoutes'));
+    app.use('/api/event', require('./routes/eventRoutes'));
+    app.use('/api/event-location', require('./routes/event-location.routes'));
+    app.use('/api/tags', require('./routes/tagRoutes'));
+    app.use('/api/provinces', require('./routes/provinceRoutes'));
+    app.use('/api/locations', require('./routes/locationRoutes'));
 
     // Middleware de manejo de errores
     app.use((err, req, res, next) => {
