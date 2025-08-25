@@ -70,13 +70,13 @@ const CreateEventScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const loadInitialData = async () => {
     try {
       setLoadingData(true);
-      const [locationsData, tagsData, provincesData] = await Promise.all([
+      const [locations, tagsData, provincesData] = await Promise.all([
         eventLocationService.getEventLocations(),
         tagService.getTags(),
         provinceService.getProvinces(),
       ]);
-      
-      setEventLocations(locationsData);
+
+      setEventLocations(locations);
       setTags(tagsData);
       setProvinces(provincesData);
     } catch (error) {
