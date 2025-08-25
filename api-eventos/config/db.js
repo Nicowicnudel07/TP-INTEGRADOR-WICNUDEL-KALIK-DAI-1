@@ -36,6 +36,17 @@ async function findUserByEmail(email) {
   return data;
 }
 
+// Nueva función para buscar usuario por username
+async function findUserByUsername(username) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('username', username)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 async function findUserById(id) {
   const { data, error } = await supabase
     .from('users')
@@ -298,6 +309,7 @@ module.exports = {
   // Users
   createUser,
   findUserByEmail,
+  findUserByUsername,
   findUserById,
   // Events
   createEvent,
@@ -330,5 +342,6 @@ module.exports = {
   getLocationsByProvince,
   findLocationById,
   // Supabase client (por si lo necesitás para queries custom)
-  supabase
+  supabase,
+  initializeDatabase
 };
