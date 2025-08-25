@@ -18,6 +18,7 @@ exports.listEvents = async (req, res) => {
     const processedEvents = await Promise.all(events.map(async (event) => {
       const eventLocation = await dbOperations.findEventLocationById(event.id_event_location);
       const creatorUser = await dbOperations.findUserById(event.id_creator_user);
+      const tags = await dbOperations.getEventTags(event.id);
 
       return {
         id: event.id,
@@ -30,7 +31,7 @@ exports.listEvents = async (req, res) => {
         max_assistance: event.max_assistance,
         event_location: eventLocation,
         creator_user: creatorUser,
-        tags: [] // Por ahora sin tags
+        tags: tags
       };
     }));
 
@@ -52,12 +53,13 @@ exports.getEventDetail = async (req, res) => {
 
     const eventLocation = await dbOperations.findEventLocationById(event.id_event_location);
     const creatorUser = await dbOperations.findUserById(event.id_creator_user);
+    const tags = await dbOperations.getEventTags(event.id);
 
     const result = {
       ...event,
       event_location: eventLocation,
       creator_user: creatorUser,
-      tags: [] // Por ahora sin tags
+      tags: tags
     };
 
     res.status(200).json(result);
