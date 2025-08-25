@@ -82,6 +82,20 @@
       "item": [
         {
           "name": "Listar Eventos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test('Tags property is present', function () {",
+                  "    pm.expect(data.collection[0]).to.have.property('tags');",
+                  "    pm.expect(Array.isArray(data.collection[0].tags)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -158,6 +172,20 @@
         },
         {
           "name": "Detalle de Evento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test('Tags property is present', function () {",
+                  "    pm.expect(data).to.have.property('tags');",
+                  "    pm.expect(Array.isArray(data.tags)).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
