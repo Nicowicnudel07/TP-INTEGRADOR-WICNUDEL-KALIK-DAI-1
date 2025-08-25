@@ -70,7 +70,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         username: username.trim(),
-        password: password,
+        password,
       });
       navigation.replace('Login');
       if (Platform.OS === 'android') {
