@@ -4,8 +4,8 @@ const { dbOperations } = require('../config/db');
 
 router.get('/', async (req, res) => {
   try {
-    const tags = dbOperations.getAllTags();
-    
+    const tags = await dbOperations.getAllTags();
+
     return res.status(200).json({
       success: true,
       tags: tags

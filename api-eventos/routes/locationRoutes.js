@@ -4,10 +4,10 @@ const { dbOperations } = require('../config/db');
 
 router.get('/province/:id', async (req, res) => {
   const { id } = req.params;
-  
+
   try {
-    const locations = dbOperations.getLocationsByProvince(id);
-    
+    const locations = await dbOperations.getLocationsByProvince(id);
+
     return res.status(200).json({
       success: true,
       locations: locations

@@ -4,8 +4,8 @@ const { dbOperations } = require('../config/db');
 
 router.get('/', async (req, res) => {
   try {
-    const provinces = dbOperations.getAllProvinces();
-    
+    const provinces = await dbOperations.getAllProvinces();
+
     return res.status(200).json({
       success: true,
       provinces: provinces
