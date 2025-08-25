@@ -6,6 +6,7 @@ import {
   Platform,
   ScrollView,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import {
   TextInput,
@@ -32,37 +33,36 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     return emailRegex.test(email);
   };
 
-  const validateForm = () => {
-    if (!firstName.trim() || firstName.length < 3) {
-      Alert.alert('Error', 'El nombre debe tener al menos 3 caracteres');
-      return false;
+  const validateForm = (): string | null => {
+    if (!firstName.trim() || firstName.trim().length < 3) {
+      return 'El nombre debe tener al menos 3 caracteres';
     }
 
-    if (!lastName.trim() || lastName.length < 3) {
-      Alert.alert('Error', 'El apellido debe tener al menos 3 caracteres');
-      return false;
+    if (!lastName.trim() || lastName.trim().length < 3) {
+      return 'El apellido debe tener al menos 3 caracteres';
     }
 
     if (!validateEmail(username)) {
-      Alert.alert('Error', 'Por favor ingresa un email válido');
-      return false;
+      return 'Por favor ingresa un email válido';
     }
 
-    if (!password.trim() || password.length < 3) {
-      Alert.alert('Error', 'La contraseña debe tener al menos 3 caracteres');
-      return false;
+    if (!password.trim() || password.trim().length < 3) {
+      return 'La contraseña debe tener al menos 3 caracteres';
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Las contraseñas no coinciden');
-      return false;
+      return 'Las contraseñas no coinciden';
     }
 
-    return true;
+    return null;
   };
 
   const handleRegister = async () => {
-    if (!validateForm()) return;
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      Alert.alert('Error', errorMessage);
+      return;
+    }
 
     setLoading(true);
     try {
@@ -72,17 +72,18 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         username: username.trim(),
         password: password,
       });
-
-      Alert.alert(
-        'Registro exitoso',
-        'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.navigate('Login'),
-          },
-        ]
-      );
+      navigation.replace('Login');
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(
+          'Registro exitoso. Ahora puedes iniciar sesión.',
+          ToastAndroid.SHORT
+        );
+      } else {
+        Alert.alert(
+          'Registro exitoso',
+          'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.'
+        );
+      }
     } catch (error: any) {
       console.error('Register error:', error);
       Alert.alert(
@@ -169,6 +170,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             mode="contained"
             onPress={handleRegister}
             style={styles.button}
+            buttonColor="#1976d2"
             loading={loading}
             disabled={loading}
           >
@@ -194,7 +196,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#e0f7fa',
   },
   scrollContainer: {
     flexGrow: 1,
