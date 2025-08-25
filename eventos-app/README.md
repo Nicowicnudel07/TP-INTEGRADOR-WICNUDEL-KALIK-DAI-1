@@ -175,7 +175,6 @@ eventos-app/
 │   ├── types/              # Definiciones de TypeScript
 │   ├── utils/              # Utilidades y helpers
 │   └── hooks/              # Custom hooks
-├── assets/                 # Imágenes y recursos
 ├── App.tsx                 # Componente principal
 ├── package.json            # Dependencias
 └── README.md              # Este archivo
