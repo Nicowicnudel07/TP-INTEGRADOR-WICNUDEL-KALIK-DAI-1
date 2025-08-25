@@ -138,8 +138,10 @@ export const eventLocationService = {
 // Tag Services
 export const tagService = {
   getTags: async (): Promise<Tag[]> => {
-    const response = await api.get<Tag[]>('/tags');
-    return response.data;
+    const response = await api.get<{ success: boolean; tags: Tag[] }>(
+      '/tags'
+    );
+    return response.data.tags;
   },
 };
 
@@ -153,13 +155,23 @@ export const provinceService = {
 
 // Location Services
 export const locationService = {
-  getLocations: async (): Promise<Location[]> => {
-    const response = await api.get<Location[]>('/locations');
+  getLocations: async (
+    provinceId: number
+  ): Promise<{ success: boolean; locations: Location[] }> => {
+    const response = await api.get<{
+      success: boolean;
+      locations: Location[];
+    }>(`/locations/province/${provinceId}`);
     return response.data;
   },
 
-  getLocationsByProvince: async (provinceId: number): Promise<Location[]> => {
-    const response = await api.get<Location[]>(`/locations?province=${provinceId}`);
+  getLocationsByProvince: async (
+    provinceId: number
+  ): Promise<{ success: boolean; locations: Location[] }> => {
+    const response = await api.get<{
+      success: boolean;
+      locations: Location[];
+    }>(`/locations/province/${provinceId}`);
     return response.data;
   },
 };

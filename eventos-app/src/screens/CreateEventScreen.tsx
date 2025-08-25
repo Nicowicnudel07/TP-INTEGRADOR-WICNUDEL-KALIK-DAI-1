@@ -70,14 +70,14 @@ const CreateEventScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const loadInitialData = async () => {
     try {
       setLoadingData(true);
-      const [locations, tagsData, provincesData] = await Promise.all([
+      const [eventLocationsData, tags, provincesData] = await Promise.all([
         eventLocationService.getEventLocations(),
         tagService.getTags(),
         provinceService.getProvinces(),
       ]);
 
-      setEventLocations(locations);
-      setTags(tagsData);
+      setEventLocations(eventLocationsData);
+      setTags(tags);
       setProvinces(provincesData);
     } catch (error) {
       console.error('Error loading initial data:', error);
@@ -89,7 +89,8 @@ const CreateEventScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   const loadLocationsByProvince = async (provinceId: number) => {
     try {
-      const locationsData = await locationService.getLocationsByProvince(provinceId);
+      const { locations: locationsData } =
+        await locationService.getLocationsByProvince(provinceId);
       setLocations(locationsData);
     } catch (error) {
       console.error('Error loading locations:', error);
