@@ -3,6 +3,11 @@ require('dotenv').config();
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
+// Supabase no requiere inicialización local, pero mantenemos la función para mantener compatibilidad
+async function initializeDatabase() {
+  return true;
+}
+
 // USERS
 async function createUser(user) {
   const { data, error } = await supabase
@@ -20,6 +25,16 @@ async function findUserByEmail(email) {
     .single();
   if (error) throw error;
   return data;
+}
+
+// Nueva función para buscar usuario por username
+async function findUserByUsername(username) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('username', username);
+  if (error) throw error;
+  return data && data.length > 0 ? data[0] : null;
 }
 
 async function findUserById(id) {
@@ -283,6 +298,7 @@ module.exports = {
   // Users
   createUser,
   findUserByEmail,
+  findUserByUsername,
   findUserById,
   // Events
   createEvent,
@@ -315,5 +331,6 @@ module.exports = {
   getLocationsByProvince,
   findLocationById,
   // Supabase client (por si lo necesitás para queries custom)
-  supabase
+  supabase,
+  initializeDatabase
 };
