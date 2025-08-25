@@ -3,9 +3,18 @@ require('dotenv').config();
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Supabase no requiere inicialización local, pero mantenemos la función para mantener compatibilidad
 async function initializeDatabase() {
-  return true;
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+    console.warn('Supabase credentials are not set. Skipping database initialization.');
+    return;
+  }
+
+  try {
+    await supabase.from('users').select('id').limit(1);
+    console.log('Database initialized');
+  } catch (err) {
+    console.warn('Could not verify database connection:', err.message);
+  }
 }
 
 // USERS
@@ -32,9 +41,10 @@ async function findUserByUsername(username) {
   const { data, error } = await supabase
     .from('users')
     .select('*')
-    .eq('username', username);
+    .eq('username', username)
+    .single();
   if (error) throw error;
-  return data && data.length > 0 ? data[0] : null;
+  return data;
 }
 
 async function findUserById(id) {
