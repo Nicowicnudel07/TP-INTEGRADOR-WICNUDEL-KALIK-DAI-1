@@ -3,6 +3,20 @@ require('dotenv').config();
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
+async function initializeDatabase() {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+    console.warn('Supabase credentials are not set. Skipping database initialization.');
+    return;
+  }
+
+  try {
+    await supabase.from('users').select('id').limit(1);
+    console.log('Database initialized');
+  } catch (err) {
+    console.warn('Could not verify database connection:', err.message);
+  }
+}
+
 // USERS
 async function createUser(user) {
   const { data, error } = await supabase
@@ -280,6 +294,7 @@ async function findLocationById(id) {
 }
 
 module.exports = {
+  initializeDatabase,
   // Users
   createUser,
   findUserByEmail,
