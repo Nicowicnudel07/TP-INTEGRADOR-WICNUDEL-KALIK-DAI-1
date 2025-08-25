@@ -104,8 +104,8 @@ export const eventService = {
 // Event Location Services
 export const eventLocationService = {
   getEventLocations: async (): Promise<EventLocation[]> => {
-    const response = await api.get<EventLocation[]>('/event-location');
-    return response.data;
+    const response = await api.get<{ collection: EventLocation[] }>('/event-location');
+    return response.data.collection;
   },
 
   getEventLocationById: async (id: number): Promise<EventLocation> => {
