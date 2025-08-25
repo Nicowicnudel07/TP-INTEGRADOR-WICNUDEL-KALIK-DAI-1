@@ -86,7 +86,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         username: username.trim(),
         password,
       });
-      navigation.navigate('Login');
+      navigation.replace('Login');
       showSuccessMessage();
     } catch (error: any) {
       console.error('Register error:', error);
@@ -174,7 +174,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             mode="contained"
             onPress={handleRegister}
             style={styles.button}
-            buttonColor="#1976d2"
+            buttonColor="#1565c0"
             loading={loading}
             disabled={loading}
           >
@@ -200,7 +200,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e0f7fa',
+    backgroundColor: '#e3f2fd',
   },
   scrollContainer: {
     flexGrow: 1,
