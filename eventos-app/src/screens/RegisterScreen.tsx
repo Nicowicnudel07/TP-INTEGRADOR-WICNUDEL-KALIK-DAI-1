@@ -6,6 +6,7 @@ import {
   Platform,
   ScrollView,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import {
   TextInput,
@@ -72,17 +73,18 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         username: username.trim(),
         password: password,
       });
-
-      Alert.alert(
-        'Registro exitoso',
-        'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.navigate('Login'),
-          },
-        ]
-      );
+      navigation.navigate('Login');
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(
+          'Registro exitoso. Ahora puedes iniciar sesión.',
+          ToastAndroid.SHORT
+        );
+      } else {
+        Alert.alert(
+          'Registro exitoso',
+          'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.'
+        );
+      }
     } catch (error: any) {
       console.error('Register error:', error);
       Alert.alert(
