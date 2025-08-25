@@ -162,13 +162,21 @@ async function findEventLocationById(id) {
   return data;
 }
 
-async function getEventLocationsByUser(userId) {
-  const { data, error } = await supabase
+async function getEventLocationsByUser(userId, page = 1, limit = 10) {
+  let query = supabase
     .from('event_locations')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('id_creator_user', userId);
+
+  if (page && limit) {
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+    query = query.range(from, to);
+  }
+
+  const { data, count, error } = await query;
   if (error) throw error;
-  return data;
+  return { locations: data, total: count };
 }
 
 async function updateEventLocation(id, updates) {

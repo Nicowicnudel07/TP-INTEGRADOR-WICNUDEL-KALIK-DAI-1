@@ -4,9 +4,11 @@ exports.listEventLocations = async (req, res) => {
   try {
     const userId = req.user && req.user.id;
     if (!userId) throw { status: 401, message: 'No autenticado.' };
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
-    const locations = await dbOperations.getEventLocationsByUser(userId);
-    res.json({ collection: locations });
+    const { locations, total } = await dbOperations.getEventLocationsByUser(userId, page, limit);
+    res.json({ page, total, collection: locations });
   } catch (err) {
     console.error('Error en listEventLocations:', err);
     res.status(err.status || 400).json({ message: err.message || 'Error al listar event-locations.' });
