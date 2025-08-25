@@ -72,7 +72,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         username: username.trim(),
         password,
       });
-      navigation.replace('Login');
+      navigation.navigate('Login');
       if (Platform.OS === 'android') {
         ToastAndroid.show(
           'Registro exitoso. Ahora puedes iniciar sesión.',
