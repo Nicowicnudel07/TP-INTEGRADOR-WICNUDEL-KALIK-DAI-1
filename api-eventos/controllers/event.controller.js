@@ -97,6 +97,14 @@ exports.createEvent = async (req, res) => {
       return res.status(400).json({ message: 'El campo duration_in_minutes es obligatorio y debe ser mayor o igual a cero.' });
     }
 
+    const eventLocation = await dbOperations.findEventLocationById(id_event_location);
+    if (!eventLocation) {
+      return res.status(400).json({ message: 'Event location no encontrada.' });
+    }
+    if (max_assistance > eventLocation.max_capacity) {
+      return res.status(400).json({ message: 'El max_assistance supera la capacidad máxima de la ubicación.' });
+    }
+
     // Crear evento
     const createdEvent = await dbOperations.createEvent({
       name,
@@ -133,6 +141,18 @@ exports.updateEvent = async (req, res) => {
 
     if (event.id_creator_user != userId) {
       return res.status(404).json({ message: 'Evento no pertenece al usuario autenticado' });
+    }
+
+    const locationId = req.body.id_event_location || event.id_event_location;
+    const eventLocation = await dbOperations.findEventLocationById(locationId);
+    if (!eventLocation) {
+      return res.status(400).json({ message: 'Event location no encontrada.' });
+    }
+
+    const maxAssistance =
+      req.body.max_assistance !== undefined ? req.body.max_assistance : event.max_assistance;
+    if (maxAssistance > eventLocation.max_capacity) {
+      return res.status(400).json({ message: 'El max_assistance supera la capacidad máxima de la ubicación.' });
     }
 
     const updatedEvent = await dbOperations.updateEvent(eventId, req.body);
