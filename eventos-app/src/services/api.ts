@@ -118,8 +118,14 @@ export const eventLocationService = {
     return response.data;
   },
 
-  updateEventLocation: async (locationData: CreateEventLocationRequest & { id: number }): Promise<EventLocation> => {
-    const response = await api.put<EventLocation>('/event-location/', locationData);
+  updateEventLocation: async (
+    id: number,
+    locationData: CreateEventLocationRequest,
+  ): Promise<EventLocation> => {
+    const response = await api.put<EventLocation>(
+      `/event-location/${id}`,
+      locationData,
+    );
     return response.data;
   },
 
