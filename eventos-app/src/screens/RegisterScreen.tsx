@@ -58,10 +58,10 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   const showSuccessMessage = () => {
     if (Platform.OS === 'android') {
-      const { ToastAndroid } = require('react-native');
-      ToastAndroid.show(
+      const rn = require('react-native');
+      rn.ToastAndroid?.show(
         'Registro exitoso. Ahora puedes iniciar sesión.',
-        ToastAndroid.SHORT
+        rn.ToastAndroid.SHORT
       );
     } else {
       Alert.alert(
