@@ -96,13 +96,13 @@ Una aplicación móvil completa para gestionar eventos, desarrollada con React N
 ## 🔧 Configuración
 
 ### Variables de Entorno
-Crea un archivo `.env` en la raíz del proyecto:
+El proyecto incluye un archivo `.env` en la raíz del proyecto con la siguiente configuración por defecto:
 
 ```env
 API_BASE_URL=http://localhost:3000/api
 ```
 
-La aplicación usará automáticamente esta variable mediante `process.env`.
+La aplicación usará automáticamente esta variable mediante `process.env`. Si necesitas apuntar a otra URL, edita este archivo.
 
 ### Configuración del Backend
 Asegúrate de que tu API backend tenga los siguientes endpoints implementados:
